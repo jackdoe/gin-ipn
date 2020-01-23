@@ -32,13 +32,13 @@ func Listener(g *gin.Engine, path string, cb func(c *gin.Context, err error, bod
 
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			cb(c, errors.Wrap(err, "failed to read body"), "", nil)
+			_ = cb(c, errors.Wrap(err, "failed to read body"), "", nil)
 			return
 		}
 
 		form, err := url.ParseQuery(string(body))
 		if err != nil {
-			cb(c, errors.Wrap(err, "failed to parse query"), "", nil)
+			_ = cb(c, errors.Wrap(err, "failed to parse query"), "", nil)
 			return
 		}
 
@@ -48,19 +48,19 @@ func Listener(g *gin.Engine, path string, cb func(c *gin.Context, err error, bod
 
 		resp, err := http.Post(getEndpoint(notification.TestIPN), r.Header.Get("Content-Type"), bytes.NewReader(body))
 		if err != nil {
-			cb(c, errors.Wrap(err, "failed to create post verification req"), "", nil)
+			_ = cb(c, errors.Wrap(err, "failed to create post verification req"), "", nil)
 			return
 		}
 		defer resp.Body.Close()
 
 		verifyStatus, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			cb(c, errors.Wrap(err, "failed to read verification response"), "", nil)
+			_ = cb(c, errors.Wrap(err, "failed to read verification response"), "", nil)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		if string(verifyStatus) != "VERIFIED" {
-			cb(c, errors.Errorf("unexpected verify status %q", verifyStatus), "", nil)
+			_ = cb(c, errors.Errorf("unexpected verify status %q", verifyStatus), "", nil)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}

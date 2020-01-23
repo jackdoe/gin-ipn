@@ -139,7 +139,7 @@ func (n *Notification) CustomerInfo() string {
 //ReadNotification reads a notification from an //IPN request
 func ReadNotification(vals url.Values) *Notification {
 	n := &Notification{}
-	decoder.Decode(n, vals) //errors due to missing fields in struct
+	_ = decoder.Decode(n, vals) //errors due to missing fields in struct
 	return n
 }
 
