@@ -8,7 +8,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 )
 
 //LiveIPNEndpoint contains the notification verification URL
@@ -44,8 +43,6 @@ func Listener(g *gin.Engine, path string, cb func(c *gin.Context, err error, bod
 		}
 
 		notification := ReadNotification(form)
-
-		log.Debugf("paypal: form: %s, parsed: %+v\n", body, notification)
 
 		body = append([]byte("cmd=_notify-validate&"), body...)
 
